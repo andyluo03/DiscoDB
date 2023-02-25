@@ -1,9 +1,9 @@
 from flask import Flask
 import requests
-import crud
+import resources
 
 app = Flask(__name__)
-crud.establish_crud()
+resources.establish_resources()
 
 if __name__ == "__main__":
     app.run()
