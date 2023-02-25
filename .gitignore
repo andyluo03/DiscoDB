@@ -130,3 +130,5 @@ dmypy.json
 
 #
 .env/
+
+src/config.json
