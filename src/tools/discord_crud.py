@@ -1,7 +1,5 @@
 import requests
 import json
-import typing
-from . import json_tools
 
 CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
