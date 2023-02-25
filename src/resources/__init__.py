@@ -1,2 +1,2 @@
 def establish_resources():
-    from . import messages
+    from . import messages, query
