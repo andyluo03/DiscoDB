@@ -9,11 +9,11 @@ app = Flask(__name__)
 
 @app.route('/log/')
 def send_log_id():
-    return {CONFIG["LOG_CHANNEL_ID"], 200}
+    return {"channel_id": CONFIG["LOG_CHANNEL_ID"]}, 200
 
 @app.route('/user/')
 def send_users_id():
-    return {CONFIG["USERS_CHANNEL_ID"], 200}
+    return {"channel_id": CONFIG["USERS_CHANNEL_ID"]}, 200
 
 resources.establish_resources()
 
