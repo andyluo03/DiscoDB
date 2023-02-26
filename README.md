@@ -113,11 +113,17 @@ user-id : <user-id>
 N/A
 ```
 
-## baseurl/message [requires auth header]
+## baseurl/messages [requires auth header]
 
 ### POST
 
 Upload a new message to a channel
+
+``Headers:``
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
 
 ``Body:``
 ```json
@@ -133,6 +139,11 @@ N/A
 
 Edit a message by id in a channel
 
+``Headers:``
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
 ``Body:``
 ```json
 {
@@ -147,6 +158,12 @@ N/A
 ### GET
 
 Get a message by id in a channel
+
+``Headers:``
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
 
 ``Body:``
 ```json
@@ -166,6 +183,12 @@ Get a message by id in a channel
 
 Delete a message by id in a channel
 
+``Headers:``
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
+
 ``Body:``
 ```json
 {
@@ -181,6 +204,12 @@ N/A
 ### GET
 
 Query a channel for any document with matching properties
+
+``Headers:``
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
 
 ``Body:``
 ```json
