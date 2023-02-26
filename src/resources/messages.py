@@ -1,13 +1,28 @@
 from flask import Flask, request
 import json
 from tools import discord_crud, json_tools, logger
+from base64 import b64decode
+import jwt
 
 from __main__ import app
+
+def validate_user(encoded_token, user_id):
+    user_json = json.loads(discord_crud.query_message(discord_crud.USERS_CHANNEL_ID, user_id))
+    secret = b64decode(user_json["secret"])
+    token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
+    return token["user"] == user_json["user"]
 
 @app.route('/messages/', methods=['POST'])
 def upload_data():
     logger.log_request(request)
 
+    # Validate user
+    encoded_token = request.headers.get('token')
+    user_id = request.headers.get('user_id')
+    if validate_user(encoded_token, user_id) == False:
+        logger.log_failure(403)
+        return {"status": 403, "error": "User is not authorized"}
+    
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
     message_content = request_body["content"]
@@ -23,6 +38,13 @@ def upload_data():
 @app.route('/messages/', methods=['DELETE'])
 def delete_data():
     logger.log_request(request)
+    
+    # Validate user
+    encoded_token = request.headers.get('token')
+    user_id = request.headers.get('user_id')
+    if validate_user(encoded_token, user_id) == False:
+        logger.log_failure(403)
+        return {"status": 403, "error": "User is not authorized"}
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
@@ -35,6 +57,13 @@ def delete_data():
 @app.route('/messages/', methods=['GET'])
 def query_data():
     logger.log_request(request)
+    
+    # Validate user
+    encoded_token = request.headers.get('token')
+    user_id = request.headers.get('user_id')
+    if validate_user(encoded_token, user_id) == False:
+        logger.log_failure(403)
+        return {"status": 403, "error": "User is not authorized"}
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
@@ -45,6 +74,13 @@ def query_data():
 @app.route('/messages/', methods=['PUT'])
 def edit_data():
     logger.log_request(request)
+    
+    # Validate user
+    encoded_token = request.headers.get('token')
+    user_id = request.headers.get('user_id')
+    if validate_user(encoded_token, user_id) == False:
+        logger.log_failure(403)
+        return {"status": 403, "error": "User is not authorized"}
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
