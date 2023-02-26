@@ -26,7 +26,6 @@ def get_matches(channel_id: str, attributes: dict):
         parameters["before"] = message_list.json()[-1]["id"]
         message_list = requests.get(f'{BASE_URL}/channels/{channel_id}/messages', params=parameters, headers=HEADERS) 
 
-    matches["status"] = 200
     return matches
 
 
@@ -38,4 +37,4 @@ def query():
 
     matches = get_matches(target_channel, attributes)
 
-    return matches
+    return matches, 200
