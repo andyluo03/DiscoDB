@@ -1,9 +1,0 @@
-{
-    "HEADERS" : {
-        "User-Agent" : "DiscordBot",
-        "authorization" : "Bot MTA3ODk2NTcyNTA5NzYyNzY0OA.GOIM-F.k3mk-f1wPm8rXU0GmvYeejyYlAHNzyKu01-n_Q",
-        "Content-Type" : "application/json"
-    },
-    "BASE_URL" : "https://discord.com/api",
-    "LOG_CHANNEL_ID": "1079141903934693447"
-}
