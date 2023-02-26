@@ -43,13 +43,21 @@ This will create the first authorized user for your database, with the credentia
 
 ## baseurl/message [requires auth header]
 
+### POST
+
+### PUT
+
+### GET
+
+### DELETE
+
 ## baseurl/query [requires_auth header]
 
 ### GET
 
 Query a channel for any document with matching properties
 
-``Body``:
+``Body:``
 ```json
 {
     "channel_id" : "<channel_to_query_from>" ,
@@ -58,7 +66,7 @@ Query a channel for any document with matching properties
     }
 }
 ```
-``Response``:
+``Response:``
 ```json
 {
     "message_ids" : [
