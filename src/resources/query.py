@@ -2,6 +2,7 @@ from flask import Flask, request
 import json
 import types
 import requests
+from ratelimit import sleep_and_retry, limits
 from tools import discord_crud, json_tools
 
 from __main__ import app
@@ -10,6 +11,8 @@ CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
 BASE_URL = CONFIG["BASE_URL"]
 
+@sleep_and_retry
+@limits(10,1)
 def get_matches(channel_id: str, attributes: dict):
     matches = {"message_ids": []}
     parameters = {"limit":100}
