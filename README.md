@@ -37,9 +37,81 @@ This will create the first authorized user for your database, with the credentia
 
 ## baseurl/setup
 
+### POST
+
+Creates the first authorized user for the database, which should appear in the `users` channel in JSON format. The credentials for this user is the username and password in the request body.
+
+`Headers:`
+```
+N/A
+```
+
+`Body:`
+```
+{
+    "user" = "<username>",
+    "pwd" = "<password>"
+}
+```
+
+`Response:`
+```
+N/A
+```
+
 ## baseurl/login
 
+### PUT
+
+Logs in a specific user if 
+1) the credentials passed through the request body are correct for that user
+2) the user exists in the `users` channel
+
+`Headers:`
+```
+N/A
+```
+
+`Body:`
+```
+{
+    "user" = "<username>",
+    "pwd" = "<password>"
+}
+```
+
+`Response:`
+```
+{
+    "token" : "<jwt_token_for_user>",
+    "user_id" : "<user_id>" // this is equivalent to the discord message id for the user in the users channel
+}
+```
+
 ## baseurl/new_user [requires auth header]
+
+### POST
+
+Creates a new user using credentials passed through the request body. This will only be successful if the current user (described by `user-id` in `headers`) is already successfully logged and if their session is successfully validated by the JWT token (also in `headers`). If successful, the created user will appear in the `users` channel.
+
+`Headers:`
+```
+token : <jwt_token> // was in the response when the current user was logged in
+user-id : <user-id>
+```
+
+`Body:`
+```
+{
+    "new_user" = "<new_username>",
+    "new_pwd" = "<new_password>"
+}
+```
+
+`Response:`
+```
+N/A
+```
 
 ## baseurl/message [requires auth header]
 
