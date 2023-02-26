@@ -45,11 +45,64 @@ This will create the first authorized user for your database, with the credentia
 
 ### POST
 
+Upload a new message to a channel
+
+``Body:``
+```json
+{
+    "channel_id": "<channel_id>"
+    "content" : "<content>" //content must be valid JSON when dumped
+}
+```
+``Response:``
+N/A
+
 ### PUT
+
+Edit a message by id in a channel
+
+``Body:``
+```json
+{
+    "channel_id": "<channel_id>",
+    "message_id": "<message_id>",
+    "content" : "<content>" //content must be valid JSON when dumped
+}
+```
+``Response:``
+N/A
 
 ### GET
 
+Get a message by id in a channel
+
+``Body:``
+```json
+{
+    "channel_id": "<channel_id>",
+    "message_id": "<message_id>"
+}
+```
+``Response:``
+```json
+"{
+    //A stringifyed JSON
+}"
+```
+
 ### DELETE
+
+Delete a message by id in a channel
+
+``Body:``
+```json
+{
+    "channel_id": "<channel_id>",
+    "message_id": "<message_id>"
+}
+```
+```Response:```
+N/A
 
 ## baseurl/query [requires_auth header]
 
@@ -61,8 +114,8 @@ Query a channel for any document with matching properties
 ```json
 {
     "channel_id" : "<channel_to_query_from>" ,
-    "attribute" : {
-        //Any Dict
+    "attributes" : {
+        //Attributes is any JSON
     }
 }
 ```
