@@ -50,6 +50,7 @@ This will create the first authorized user for your database, with the credentia
 DESC
 
 ``Body``:
-```{
-
+```json
+{
+    
 }```
