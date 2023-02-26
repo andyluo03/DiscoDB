@@ -22,7 +22,7 @@ def validate_user(encoded_token, user_id):
 def new_user():
      # Validate user
     encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user_id')
+    user_id = request.headers.get('user-id')
     if validate_user(encoded_token, user_id) == False:
         logger.log_failure(403)
         return {"status": 403, "error": "User is not authorized"}
