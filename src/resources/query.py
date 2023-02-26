@@ -12,7 +12,7 @@ HEADERS = CONFIG["HEADERS"]
 BASE_URL = CONFIG["BASE_URL"]
 
 @sleep_and_retry
-@limits(calls=5,period=1)
+@limits(calls=2,period=1)
 def get_matches(channel_id: str, attributes: dict):
     matches = {"message_ids": []}
     parameters = {"limit":100}
