@@ -21,7 +21,7 @@ Have you ever had random pieces of JSON lying around and thought, *where could I
 }
 ```
 
-- To get your bot token . **MAKE SURE NOT TO PUSH YOUR BOT TOKEN TO REMOTE** ... or else everyone on your team will get mad at you :(
+- To get your bot token read [this](https://discord.com/developers/docs/getting-started#creating-an-app) **MAKE SURE NOT TO PUSH YOUR BOT TOKEN TO REMOTE** ... or else everyone on your team will get mad at you :(
 - To get the channel IDs of the `users`and `logs` channels, first make sure you're in developer mode on discord (`User Settings > Advanced > Developer Mode`). Right click one of the channels and then click `Copy ID`; you can then paste the ID in it's corresponding place in the JSON file.
 
 4) Send a POST Request to the `/setup` API endpoint with a request body:
