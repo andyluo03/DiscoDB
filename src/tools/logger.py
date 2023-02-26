@@ -5,7 +5,7 @@ import json
 CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
 BASE_URL = CONFIG["BASE_URL"]
-LOG_CHANNEL = CONFIG["LOG_CHANNEL"]
+LOG_CHANNEL = CONFIG["LOG_CHANNEL_ID"]
 
 def log_request(unprocessed_request):
     log = {"content": '{"type": "' + unprocessed_request.method + '", "time": "' + str(time.time()) + '"}'}
