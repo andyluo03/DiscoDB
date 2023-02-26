@@ -47,11 +47,22 @@ This will create the first authorized user for your database, with the credentia
 
 ### GET
 
-DESC
+Query a channel for any document with matching properties
 
 ``Body``:
 ```json
 {
-    
+    "channel_id" : "<channel_to_query_from>" ,
+    "attribute" : {
+        //Any Dict
+    }
+}
+```
+``Response``:
+```json
+{
+    "message_ids" : [
+        //Messages IDs of All Matches
+    ]
 }
 ```
