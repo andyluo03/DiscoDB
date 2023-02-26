@@ -44,3 +44,12 @@ This will create the first authorized user for your database, with the credentia
 ## baseurl/message [requires auth header]
 
 ## baseurl/query [requires_auth header]
+
+### GET
+
+DESC
+
+``Body``:
+```{
+
+}```
