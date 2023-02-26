@@ -1,8 +1,0 @@
-{
-    "HEADERS" : {
-        "User-Agent" : "DiscordBot",
-        "authorization" : "Bot TOKEN",
-        "Content-Type" : "application/json"
-    },
-    "BASE_URL" : "https://discord.com/api"
-}
