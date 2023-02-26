@@ -3,7 +3,7 @@ import json
 import bcrypt
 import jwt
 from __main__ import app
-from tools import discord_crud
+from tools import discord_crud, logger
 import os
 from base64 import b64encode, b64decode
 import requests
@@ -12,40 +12,22 @@ BASE_URL = discord_crud.BASE_URL
 HEADERS = discord_crud.HEADERS
 USERS_CHANNEL_ID = discord_crud.USERS_CHANNEL_ID
 
-def query_user(user: str):
-    parameters = {"limit":100}
-    message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS)
-    while len(message_list.json()) != 0:
-        for message in message_list.json():
-            user_content = json.loads(message["content"])
-            if user_content["user"] == user:
-                return user_content
-        parameters["before"] = message_list.json()[-1]["id"]
-        message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS) 
-    return None
+def validate_user(encoded_token, user_id):
+    user_json = json.loads(discord_crud.query_message(discord_crud.USERS_CHANNEL_ID, user_id))
+    secret = b64decode(user_json["secret"])
+    token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
+    return token["user"] == user_json["user"]
 
 @app.route("/new_user", methods=["POST"])
 def new_user():
-    # get encoded token
+     # Validate user
     encoded_token = request.headers.get('token')
-    if encoded_token is None:
-        return { "status": 418 }
+    user_id = request.headers.get('user_id')
+    if validate_user(encoded_token, user_id) == False:
+        logger.log_failure(403)
+        return {"status": 403, "error": "User is not authorized"}
     
-    # get user json
     body = json.loads(request.data, strict=False)
-    user = body["user"]
-    user_json = query_user(user)
-    if user_json is None:
-        return { "status": 400 }
-    if user_json["admin"] == False:
-        return { "status": 401 }
-    
-    # validate user
-    secret = b64decode(user_json["secret"])
-    token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
-    if token["user"] != user:
-        return { "status": 402 }
-    
     # add user
     new_user = body["new_user"]
     new_pwd = body["new_pwd"]

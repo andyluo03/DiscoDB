@@ -13,12 +13,13 @@ USERS_CHANNEL_ID = discord_crud.USERS_CHANNEL_ID
 
 def query_user(user: str):
     parameters = {"limit":100}
-    user_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS)
+    message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS)
     while len(message_list.json()) != 0:
-        for user in user_list.json():
-            user_content = json.loads(user["content"])
-            if user_content["user"] == user:
-                return user_content
+        for message in message_list.json():
+            message_content = json.loads(message["content"])
+            message_id = message["id"]
+            if message_content["user"] == user:
+                return message_content, message_id # user_match, user_id
         parameters["before"] = message_list.json()[-1]["id"]
         message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS) 
     return None
@@ -32,7 +33,7 @@ def login():
     if user is None or pwd is None:
         return { "status": 400 }
     
-    user_match = query_user(user)
+    user_match, user_id = query_user(user)
     if user_match is None:
         return { "status": 404 }
     
@@ -44,5 +45,4 @@ def login():
         return { "status": 403 }
     
     token = jwt.encode({"user": user, "admin": user_match["admin"]}, b64decode(secret), algorithm="HS256")
-    print(token)
-    return token
+    return { "token" : token, "user_id" : user_id }
