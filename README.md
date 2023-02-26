@@ -33,5 +33,14 @@ Have you ever had random pieces of JSON lying around and thought, *where could I
 ```
 This will create the first authorized user for your database, with the credentials (username and password) that you specified. If the user was created successfully, they should show up in your `users` channel in the form of stringified JSON. After logging in as this user (using a different API endpoint `/login`), you will be able to manipulate the data in your database using other endpoints. More in-depth explanations of these endpoints are below. 
 
+# Endpoints
 
+## baseurl/setup
 
+## baseurl/login
+
+## baseurl/new_user [requires auth header]
+
+## baseurl/message [requires auth header]
+
+## baseurl/query [requires_auth header]
