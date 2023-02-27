@@ -20,19 +20,29 @@ def validate_user(encoded_token, user_id):
 
 @app.route("/new_user", methods=["POST"])
 def new_user():
-     # Validate user
+     # Validate current user
     encoded_token = request.headers.get('token')
     user_id = request.headers.get('user-id')
     if validate_user(encoded_token, user_id) == False:
         logger.log_failure(403)
-        return {"status": 403, "error": "User is not authorized"}
+        return { "status" : "error", "message": "User is not authorized"}, 403
     
-    body = json.loads(request.data, strict=False)
-    # add user
-    new_user = body["new_user"]
-    new_pwd = body["new_pwd"]
+    # get new user info
+    try:
+        request_body = json.loads(request.data, strict=False)
+        new_user = request_body["new_user"]
+        new_pwd = request_body["new_pwd"]
+    except:
+        return { "status": "error", "message": "Invalid request body" }, 400
+    
+    # hash password and generate secret
     pwd_hash = bcrypt.hashpw(new_pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
     new_secret = b64encode(os.urandom(16)).decode("utf-8")
-    discord_crud.send_message(USERS_CHANNEL_ID, json.dumps({"user": new_user, "pwd": pwd_hash, "admin": True, "secret": new_secret}))
     
-    return { "status": 200 }
+    # create new user
+    new_user_data = {"user": new_user, "pwd": pwd_hash, "admin": True, "secret": new_secret}
+    discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(new_user_data))
+    if discord_response.status_code != 200:
+        return { "status": "error", "message": "Failed to send message to users channel" }, 500
+    
+    return { "status": "success", "message": "User created" }, 200

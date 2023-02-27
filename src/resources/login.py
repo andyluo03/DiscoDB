@@ -18,6 +18,7 @@ USERS_CHANNEL_ID = discord_crud.USERS_CHANNEL_ID
 def query_user(user: str):
     parameters = {"limit":100}
     message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS)
+    # iterate through messages until user is found
     while len(message_list.json()) != 0:
         for message in message_list.json():
             message_content = json.loads(message["content"])
@@ -26,27 +27,38 @@ def query_user(user: str):
                 return message_content, message_id # user_match, user_id
         parameters["before"] = message_list.json()[-1]["id"]
         message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS) 
-    return None
+    return None, None
 
 @app.route("/login", methods=["PUT"])
 def login():
-    body = json.loads(request.data, strict=False)
-    user = body["user"]
-    pwd = body["pwd"]
+    # get user and pwd from request body
+    try:
+        request_body = json.loads(request.data, strict=False)
+        user = request_body["user"]
+        pwd = request_body["pwd"]
+    except:
+        return { "status" : "error", "message" : "Invalid request body" }, 400
     
+    # check if user and pwd are in request body
     if user is None or pwd is None:
-        return { "status": 400 }
+        return { "status" : "error", "message" : "Invalid request body" }, 400
     
+    # check if user exists
     user_match, user_id = query_user(user)
     if user_match is None:
-        return { "status": 404 }
+        return { "status" : "error", "message" : "User not found" }, 404
     
+    # check if password is correct
     if (bcrypt.checkpw(pwd.encode("utf-8"), user_match["pwd"].encode("utf-8")) == False):
-        return { "status": 401 }
+        return { "status" : "error", "message" : "Incorrect password" }, 403
     
+    # check if user has a secret
     secret = user_match["secret"]
     if secret is None:
-        return { "status": 403 }
+        return { "status" : "error", "message" : "User does not have a secret" }, 500
     
+    # generate token
     token = jwt.encode({"user": user, "admin": user_match["admin"]}, b64decode(secret), algorithm="HS256")
-    return { "token" : token, "user_id" : user_id }
+    
+    # return token and user_id
+    return { "token" : token, "user-id" : user_id, "status" : "success", "message" : "User logged in" }, 200
