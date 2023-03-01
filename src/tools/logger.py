@@ -17,5 +17,5 @@ def log_request(unprocessed_request):
 @sleep_and_retry
 @limits(calls=1, period=1)
 def log_failure(status_code):
-    log = {"content": '{"error": "'+ status_code +'", "time": "' + str(time.time()) + '"}'}
+    log = {"content": '{"error": "'+ str(status_code) +'", "time": "' + str(time.time()) + '"}'}
     requests.post(f'{BASE_URL}/channels/{LOG_CHANNEL}/messages', data=json.dumps(log),headers=HEADERS)
