@@ -29,18 +29,20 @@ def setup():
         request_body = json.loads(request.data, strict=False)
         user = request_body["user"]
         pwd = request_body["pwd"]
+        assert(type(user) == str and type(pwd) == str)
+        assert(len(user) > 0 and len(pwd) > 0)
     except:
         return { "status" : "error", "message": "Invalid request body " }, 400
         
-    # hash password and generate secret
-    pwd_hash = bcrypt.hashpw(pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-    secret = b64encode(os.urandom(16)).decode("utf-8")
-    
     # create user
-    user_data = { "user": user, "pwd": pwd_hash, "admin": True, "secret": secret }
-    discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
-    if discord_response.status_code != 200:
-        return { "status": "error", "message": "Failed to send message to users channel" }, 500
+    pwd_hash = bcrypt.hashpw(pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    user_data = { "user": user, "pwd": pwd_hash, "admin": True }
+    discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
+
+    # below doesnt work bc send_message needs to return the response, we can change that later
+    # discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
+    # if discord_response.status_code != 200:
+    #     return { "status": "error", "message": "Failed to send message to users channel" }, 500
     
     # return success
     return { " status": "success", "message": "User created" }, 200

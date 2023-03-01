@@ -4,27 +4,35 @@ import bcrypt
 import jwt
 from __main__ import app
 from tools import discord_crud, logger
-import os
-from base64 import b64encode, b64decode
-import requests
 
-BASE_URL = discord_crud.BASE_URL
-HEADERS = discord_crud.HEADERS
-USERS_CHANNEL_ID = discord_crud.USERS_CHANNEL_ID
+CONFIG = dict(json.load(open("config.json")))
+HEADERS = CONFIG["HEADERS"]
+BASE_URL = CONFIG["BASE_URL"]
+USERS_CHANNEL_ID = CONFIG["USERS_CHANNEL_ID"]
+SECRET_KEY = CONFIG["SECRET_KEY"]
 
-def validate_user(encoded_token, user_id):
-    user_json = json.loads(discord_crud.query_message(discord_crud.USERS_CHANNEL_ID, user_id))
-    secret = b64decode(user_json["secret"])
-    token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
-    return token["user"] == user_json["user"]
+# def validate_user(encoded_token, user_id):
+#     user_json = json.loads(discord_crud.query_message(USERS_CHANNEL_ID, user_id))
+#     secret = b64decode(user_json["secret"])
+#     token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
+#     return token["user"] == user_json["user"]
 
-@app.route("/new_user", methods=["POST"])
+# type param as list of str
+def is_authorized(auth_header: str) -> bool:
+    try:
+        auth_header_split = auth_header.split(" ")
+        assert(len(auth_header_split) == 2 and auth_header_split[0] == "Bearer")
+        encoded_token = auth_header_split[1]
+        jwt.decode(encoded_token, SECRET_KEY, algorithms=["HS256"])
+        return True
+    except:
+        return False
+
+@app.route("/new-user", methods=["POST"])
 def new_user():
-     # Validate current user
-    encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    if validate_user(encoded_token, user_id) == False:
-        logger.log_failure(403)
+    # authorize user
+    auth_header = request.headers.get('Authorization')
+    if not is_authorized(auth_header):
         return { "status" : "error", "message": "User is not authorized"}, 403
     
     # get new user info
@@ -35,14 +43,14 @@ def new_user():
     except:
         return { "status": "error", "message": "Invalid request body" }, 400
     
-    # hash password and generate secret
-    pwd_hash = bcrypt.hashpw(new_pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-    new_secret = b64encode(os.urandom(16)).decode("utf-8")
-    
     # create new user
-    new_user_data = {"user": new_user, "pwd": pwd_hash, "admin": True, "secret": new_secret}
-    discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(new_user_data))
-    if discord_response.status_code != 200:
-        return { "status": "error", "message": "Failed to send message to users channel" }, 500
+    pwd_hash = bcrypt.hashpw(new_pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    new_user_data = {"user": new_user, "pwd": pwd_hash, "admin": True}
+    discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(new_user_data))
+    
+    # below doesnt work bc send_message needs to return the response, we can change that later
+    # discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
+    # if discord_response.status_code != 200:
+    #     return { "status": "error", "message": "Failed to send message to users channel" }, 500
     
     return { "status": "success", "message": "User created" }, 200
