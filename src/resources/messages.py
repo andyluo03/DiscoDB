@@ -27,11 +27,7 @@ def upload_data():
     target_channel = request_body["channel_id"]
     message_content = request_body["content"]
 
-    if not json_tools.verify_json(message_content):
-        logger.log_failure(400)
-        return {"status": 400, "error": "JSON is not formatted correctly"}
-
-    discord_crud.send_message(target_channel, message_content)
+    discord_crud.send_message(target_channel, json.dumps(message_content))
     
     return {"status": 200}
 
