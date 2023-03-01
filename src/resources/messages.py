@@ -83,9 +83,5 @@ def edit_data():
     message_id = request_body["message_id"]
     message_content = request_body["content"]
 
-    if not json_tools.verify_json(message_content):
-        logger.log_failure(400)
-        return {"status": 400, "error": "JSON is not formatted correctly"}
-
     discord_crud.edit_message(target_channel, message_id, message_content)
     return {"status": 200}
