@@ -38,14 +38,16 @@ def new_user():
     # get new user info
     try:
         request_body = json.loads(request.data, strict=False)
-        new_user = request_body["new_user"]
-        new_pwd = request_body["new_pwd"]
+        name = request_body["name"]
+        pwd = request_body["password"]
+        assert(type(name) == str and type(pwd) == str)
+        assert(len(name) > 0 and len(pwd) > 0)
     except:
         return { "status": "error", "message": "Invalid request body" }, 400
     
     # create new user
-    pwd_hash = bcrypt.hashpw(new_pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-    new_user_data = {"user": new_user, "pwd": pwd_hash, "admin": True}
+    pwd_hash = bcrypt.hashpw(pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    new_user_data = {"name": name, "password": pwd_hash, "admin": True}
     discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(new_user_data))
     
     # below doesnt work bc send_message needs to return the response, we can change that later

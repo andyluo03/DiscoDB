@@ -17,7 +17,7 @@ SECRET_KEY = CONFIG["SECRET_KEY"]
 
 @sleep_and_retry
 @limits(calls=2, period=1)
-def query_user(user: str):
+def query_user(name: str):
     parameters = {"limit":100}
     message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS)
     # iterate through messages until user is found
@@ -25,7 +25,7 @@ def query_user(user: str):
         for message in message_list.json():
             message_content = json.loads(message["content"])
             message_id = message["id"]
-            if message_content["user"] == user:
+            if message_content["name"] == name:
                 return message_content, message_id # user_json, user_id
         parameters["before"] = message_list.json()[-1]["id"]
         message_list = requests.get(f'{BASE_URL}/channels/{USERS_CHANNEL_ID}/messages', params=parameters, headers=HEADERS) 
@@ -33,26 +33,26 @@ def query_user(user: str):
 
 @app.route("/login", methods=["PUT"])
 def login():
-    # get user and pwd from request body
+    # get username and pwd from request body
     try:
         request_body = json.loads(request.data, strict=False)
-        user = request_body["user"]
-        pwd = request_body["pwd"]
-        assert(type(user) == str and type(pwd) == str)
-        assert(len(user) > 0 and len(pwd) > 0)
+        name = request_body["name"]
+        pwd = request_body["password"]
+        assert(type(name) == str and type(pwd) == str)
+        assert(len(name) > 0 and len(pwd) > 0)
     except:
         return { "status" : "error", "message" : "Invalid request body" }, 400
     
     # check if user exists
-    user_json, user_id = query_user(user)
+    user_json, user_id = query_user(name)
     if not user_json:
         return { "status" : "error", "message" : "User not found" }, 404
     
     # check if password is correct
-    if (bcrypt.checkpw(pwd.encode("utf-8"), user_json["pwd"].encode("utf-8")) == False):
+    if (bcrypt.checkpw(pwd.encode("utf-8"), user_json["password"].encode("utf-8")) == False):
         return { "status" : "error", "message" : "Incorrect password" }, 403
     
     # generate token
-    token = jwt.encode({"user": user, "user-id": user_id, "admin": user_json["admin"]}, SECRET_KEY, algorithm="HS256")
+    token = jwt.encode({"sub": user_id, "name": name, "admin": user_json["admin"]}, SECRET_KEY, algorithm="HS256")
     
     return { "Authorization" : "Bearer " + token, "status" : "success", "message" : "User logged in" }, 200
