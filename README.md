@@ -129,7 +129,9 @@ user-id : <user-id>
 ```json
 {
     "channel_id": "<channel_id>"
-    "content" : "<content>" //content must be valid JSON when dumped
+    "content" : {
+        //DATA
+    }
 }
 ```
 ``Response:``
@@ -149,7 +151,9 @@ user-id : <user-id>
 {
     "channel_id": "<channel_id>",
     "message_id": "<message_id>",
-    "content" : "<content>" //content must be valid JSON when dumped
+    "content" : {
+        //DATA
+    }
 }
 ```
 ``Response:``
