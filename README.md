@@ -27,8 +27,8 @@ Have you ever had random pieces of JSON lying around and thought, *where could I
 4) Send a POST Request to the `/setup` API endpoint with a request body:
 ```
 {
-  "user" = "<insert_username>", // remove angled brackets when substituting
-  "pwd" = "<insert_password>"
+  "user" : "<insert_username>", // remove angled brackets when substituting
+  "pwd" : "<insert_password>"
 }
 ```
 This will create the first authorized user for your database, with the credentials (username and password) that you specified. If the user was created successfully, they should show up in your `users` channel in the form of stringified JSON. After logging in as this user (using a different API endpoint `/login`), you will be able to manipulate the data in your database using other endpoints. More in-depth explanations of these endpoints are below. 
@@ -49,8 +49,8 @@ N/A
 `Body:`
 ```
 {
-    "user" = "<username>",
-    "pwd" = "<password>"
+    "user" : "<username>",
+    "pwd" : "<password>"
 }
 ```
 
@@ -75,8 +75,8 @@ N/A
 `Body:`
 ```
 {
-    "user" = "<username>",
-    "pwd" = "<password>"
+    "user" : "<username>",
+    "pwd" : "<password>"
 }
 ```
 
@@ -103,8 +103,8 @@ user-id : <user-id>
 `Body:`
 ```
 {
-    "new_user" = "<new_username>",
-    "new_pwd" = "<new_password>"
+    "new_user" : "<new_username>",
+    "new_pwd" : "<new_password>"
 }
 ```
 
