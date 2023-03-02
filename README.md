@@ -49,8 +49,8 @@ N/A
 `Body:`
 ```
 {
-    "user" = "<username>",
-    "pwd" = "<password>"
+    "user" : "<username>",
+    "pwd" : "<password>"
 }
 ```
 
@@ -75,8 +75,8 @@ N/A
 `Body:`
 ```
 {
-    "user" = "<username>",
-    "pwd" = "<password>"
+    "user" : "<username>",
+    "pwd" : "<password>"
 }
 ```
 
@@ -103,8 +103,8 @@ user-id : <user-id>
 `Body:`
 ```
 {
-    "new_user" = "<new_username>",
-    "new_pwd" = "<new_password>"
+    "new_user" : "<new_username>",
+    "new_pwd" : "<new_password>"
 }
 ```
 
