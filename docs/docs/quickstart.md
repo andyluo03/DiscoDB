@@ -70,7 +70,8 @@ Do not include the alligator brackets!
 Deploy (this will change to a bash script soon):
 
 ```bash
-python3 src/app.py
+cd src
+python3 app.py
 ```
 
 ## First Requests
