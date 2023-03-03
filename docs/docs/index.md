@@ -6,5 +6,5 @@ DiscoDB is a NoSQL document-based database written in Python.
 
 * Intuitive API ideal for everyone from beginners to veterans
 * Infinite storage using the Discord Web API
-* Secured requests using JWT authentication
+* Secured requests using JWT authorization
 * Various optimizations to improve performance
