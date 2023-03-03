@@ -1,0 +1,22 @@
+site_name: DiscoStack
+repo_url: https://github.com/andyluo03/DiscoDB
+repo_name: DiscoDB
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Authentication: authentication.md
+  - API Endpoints: 
+    - setup: api/setup.md
+    - login: api/login.md
+    - new_user: api/new_user.md
+    - messages: api/messages.md
+    - query: api/query.md
+
+theme: 
+  name: material
+  palette: 
+    scheme: slate
+    primary: indigo
+  icon:
+    repo: fontawesome/brands/github 
