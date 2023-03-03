@@ -4,11 +4,11 @@ Have you ever had so much JSON lying around you didn't know what to do with it? 
 
 ## Getting Started
 
-Visit our quickstart [here](https://andyluo03.github.io/)
+Visit our quickstart [here](https://andyluo03.github.io/DiscoDB/quickstart/)
 
 ## Documentation
 
-Visit our docs [here](https://andyluo03.github.io/)
+Visit our docs [here](https://andyluo03.github.io/DiscoDB/)
 
 ## Contributing
 
