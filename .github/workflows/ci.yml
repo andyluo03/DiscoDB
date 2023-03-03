@@ -21,7 +21,9 @@ jobs:
           key: ${{ github.ref }}
           path: .cache
       
-      - run: pip install mkdocs-material 
+      - name: Install MKDocs
+        working-directory: ./docs
+        run: pip install mkdocs-material 
       
       - name: Deploy Pages
         working-directory: ./docs
