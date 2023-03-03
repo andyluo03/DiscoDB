@@ -21,6 +21,7 @@ def query_user(user: str):
     while len(message_list.json()) != 0:
         for message in message_list.json():
             message_content = json.loads(message["content"])
+            message_content = json.loads(message_content)
             message_id = message["id"]
             if message_content["user"] == user:
                 return message_content, message_id # user_match, user_id
