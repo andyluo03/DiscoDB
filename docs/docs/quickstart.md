@@ -33,7 +33,7 @@ pip install -r requirements.txt
 
 6. Under Privileged Gateway Intents, toggle Message Content Intents.
 
-7. Finally, click OAuth2 on the left, choose the "bot" scope and "Administrator" bot permissions. Then, copy the generated URL and invite it the bot to your server.
+7. Finally, click OAuth2 > URL Generator on the left, choose the "bot" scope and "Administrator" bot permissions. Then, copy the generated URL and invite it the bot to your server.
 
 ## Configuring DiscoDB
 
