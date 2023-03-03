@@ -12,4 +12,4 @@ Visit our docs [here](https://andyluo03.github.io/DiscoDB/)
 
 ## Contributing
 
-Visit the [wiki](https://github.com/andyluo03/DiscoDB/wiki) to being contributing!
+Visit the [wiki](https://github.com/andyluo03/DiscoDB/wiki) to begin contributing!
