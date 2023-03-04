@@ -7,7 +7,7 @@ from base64 import b64decode
 from ratelimit import sleep_and_retry, limits
 
 from __main__ import app
-from tools import discord_crud
+from tools import discord
 
 CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
@@ -24,7 +24,6 @@ def query_user(name: str):
     while len(message_list.json()) != 0:
         for message in message_list.json():
             message_content = json.loads(message["content"])
-            message_content = json.loads(message_content)
             message_id = message["id"]
             if message_content["name"] == name:
                 return message_content, message_id # user_json, user_id

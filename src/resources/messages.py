@@ -1,33 +1,25 @@
 from flask import Flask, request
 import json
-from tools import discord_crud, json_tools, logger
+from tools import discord, logger, auth
 from base64 import b64decode
 import jwt
 
 from __main__ import app
 
-def validate_user(encoded_token, user_id):
-    user_json = json.loads(discord_crud.query_message(discord_crud.USERS_CHANNEL_ID, user_id))
-    secret = b64decode(user_json["secret"])
-    token = jwt.decode(encoded_token, secret, algorithms=["HS256"])
-    return token["user"] == user_json["user"]
-
 @app.route('/messages/', methods=['POST'])
 def upload_data():
     logger.log_request(request)
 
-    # Validate user
-    encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    if validate_user(encoded_token, user_id) == False:
-        logger.log_failure(403)
-        return {"status": 403, "error": "User is not authorized"}
+    # authorize user
+    auth_header = request.headers.get('Authorization')
+    if not auth.is_authorized(auth_header):
+        return { "status" : "error", "message": "User is not authorized"}, 403
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
     message_content = request_body["content"]
 
-    discord_crud.send_message(target_channel, json.dumps(message_content))
+    discord.send_message(target_channel, message_content)
     
     return {"status": 200}
 
@@ -35,18 +27,16 @@ def upload_data():
 def delete_data():
     logger.log_request(request)
     
-    # Validate user
-    encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    if validate_user(encoded_token, user_id) == False:
-        logger.log_failure(403)
-        return {"status": 403, "error": "User is not authorized"}
+    # authorize user
+    auth_header = request.headers.get('Authorization')
+    if not auth.is_authorized(auth_header):
+        return { "status" : "error", "message": "User is not authorized"}, 403
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
     message_id = request_body["message_id"]
 
-    discord_crud.delete_message(target_channel, message_id)
+    discord.delete_message(target_channel, message_id)
 
     return {"status": 200}
 
@@ -54,34 +44,30 @@ def delete_data():
 def query_data():
     logger.log_request(request)
     
-    # Validate user
-    encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    if validate_user(encoded_token, user_id) == False:
-        logger.log_failure(403)
-        return {"status": 403, "error": "User is not authorized"}
+    # authorize user
+    auth_header = request.headers.get('Authorization')
+    if not auth.is_authorized(auth_header):
+        return { "status" : "error", "message": "User is not authorized"}, 403
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
     message_id = request_body["message_id"]
 
-    return discord_crud.query_message(target_channel, message_id)
+    return discord.query_message(target_channel, message_id)
 
 @app.route('/messages/', methods=['PUT'])
 def edit_data():
     logger.log_request(request)
     
-    # Validate user
-    encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    if validate_user(encoded_token, user_id) == False:
-        logger.log_failure(403)
-        return {"status": 403, "error": "User is not authorized"}
+    # authorize user
+    auth_header = request.headers.get('Authorization')
+    if not auth.is_authorized(auth_header):
+        return { "status" : "error", "message": "User is not authorized"}, 403
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
     message_id = request_body["message_id"]
     message_content = request_body["content"]
 
-    discord_crud.edit_message(target_channel, message_id, message_content)
+    discord.edit_message(target_channel, message_id, message_content)
     return {"status": 200}

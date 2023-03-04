@@ -2,19 +2,19 @@ from flask import Flask, request
 import json
 import bcrypt
 from __main__ import app
-from tools import discord_crud
+from tools import discord
 import os
 from base64 import b64encode
 import requests
 
-HEADERS = discord_crud.HEADERS
-BASE_URL = discord_crud.BASE_URL
-USERS_CHANNEL_ID = discord_crud.USERS_CHANNEL_ID
+HEADERS = discord.HEADERS
+BASE_URL = discord.BASE_URL
+USERS_CHANNEL_ID = discord.USERS_CHANNEL_ID
 
 @app.route("/setup", methods=["POST"])
 def setup():
     # check if users channel exists, if it doesn't return a 409 conflict
-    channel = discord_crud.get_channel(USERS_CHANNEL_ID)
+    channel = discord.get_channel(USERS_CHANNEL_ID)
     if channel.status_code != 200:
         return { "status": "error", "message": "Users channel does not exist" }, 409
     
@@ -37,7 +37,7 @@ def setup():
     # create user
     pwd_hash = bcrypt.hashpw(pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
     user_data = { "name": name, "password": pwd_hash, "admin": True }
-    discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
+    discord.send_message(USERS_CHANNEL_ID, user_data)
 
     # below doesnt work bc send_message needs to return the response, we can change that later
     # discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))

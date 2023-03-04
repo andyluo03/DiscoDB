@@ -3,7 +3,7 @@ import json
 import bcrypt
 import jwt
 from __main__ import app
-from tools import discord_crud, logger
+from tools import discord, logger
 
 CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
@@ -18,14 +18,14 @@ SECRET_KEY = CONFIG["SECRET_KEY"]
 #     return token["user"] == user_json["user"]
 
 # type param as list of str
-def is_authorized(auth_header: str) -> bool:
+def is_authorized(auth_header) -> bool:
     try:
         auth_header_split = auth_header.split(" ")
         assert(len(auth_header_split) == 2 and auth_header_split[0] == "Bearer") # check if auth header is valid
         encoded_token = auth_header_split[1]
         token = jwt.decode(encoded_token, SECRET_KEY, algorithms=["HS256"]) # check if token is valid
         assert(token["admin"] == True) # check if user is admin in token
-        user_json = json.loads(discord_crud.query_message(USERS_CHANNEL_ID, token["sub"]))
+        user_json = discord.query_message(USERS_CHANNEL_ID, token["sub"])
         assert(user_json["admin"] == True) # check if user is admin in db
         assert(user_json["name"] == token["name"]) # check if user name in db matches name in token
         return True
@@ -52,7 +52,7 @@ def new_user():
     # create new user
     pwd_hash = bcrypt.hashpw(pwd.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
     new_user_data = {"name": name, "password": pwd_hash, "admin": True}
-    discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(new_user_data))
+    discord.send_message(USERS_CHANNEL_ID, new_user_data)
     
     # below doesnt work bc send_message needs to return the response, we can change that later
     # discord_response = discord_crud.send_message(USERS_CHANNEL_ID, json.dumps(user_data))
