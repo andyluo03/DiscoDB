@@ -1,12 +1,11 @@
 # Query
 
-## ``get`` /query
+## ``GET`` /query
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:

@@ -40,4 +40,4 @@ def setup():
     #     return { "status": "error", "message": "Failed to send message to users channel" }, 500
     
     # return success
-    return { " status": "success", "message": "User created" }, 200
+    return { "status": "success", "message": "User created" }, 200

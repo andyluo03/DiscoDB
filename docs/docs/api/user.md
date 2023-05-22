@@ -1,6 +1,6 @@
 # User
 
-## ``get`` /user
+## ``GET`` /user
 
 Headers:
 

@@ -37,16 +37,17 @@ pip install -r requirements.txt
 
 ## Configuring DiscoDB
 
-Create ``config.json`` under DiscoDB/src.
+Run ``db_setup.py`` to create the database using the command below:
 
-Linux/MacOs:
+Linux/Mac:
 
 ```bash
-cd src
-touch config.json
+python3 db_setup.py
 ```
 
-Then, populate config.json with:
+Follow the instructions provided by the setup wizard. It will prompt you to enter the Discord Bot Token from step 5 of "Connecting to Discord." It will also ask for the channel ids for the users and logs channels, which you can obtain by right clicking each channel and clicking copy id.
+
+After the setup is complete, confirm that a ``config.json`` file in the ``src`` directory has been created and populated with the correct information. This file contains the configuration for DiscoDB and should look something like this:
 
 ```json
 {
@@ -57,13 +58,10 @@ Then, populate config.json with:
     },
     "BASE_URL" : "https://discord.com/api",
     "USERS_CHANNEL_ID" : "<channel id of users>",
-    "LOG_CHANNEL_ID" : "<channel id of logs>"
+    "LOG_CHANNEL_ID" : "<channel id of logs>",
+    "SECRET_KEY" : "<secret key>"
 }
 ```
-
-The Token is the token copied in step 5 of "Connecting to Discord." You can obtain channel id's by right clicking a channel and clicking copy id.
-
-Do not include the alligator brackets!
 
 ## Launching
 
@@ -80,9 +78,10 @@ Call ``http://127.0.0.1:5000/setup`` with body:
 
 ```json
 {
-    "user": "<username>",
-    "pwd": "<password>"
+    "name": "<username>",
+    "password": "<password>"
 }
 ```
+This will create the first user with the given username and password. If it succeeded, the users channel for your server should now contain a user.
 
 You have now successfully setup DiscoDB, a NoSQL database that promises infinite storage at no cost!
