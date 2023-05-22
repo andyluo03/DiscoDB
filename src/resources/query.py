@@ -32,14 +32,10 @@ def get_matches(channel_id: str, attributes: dict):
 
 
 @app.route('/query/', methods=['GET'])
+@auth.requires_auth
 def query():
     encoded_token = request.headers.get('token')
-    user_id = request.headers.get('user-id')
-    
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not auth.is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
+    user_id = request.headers.get('user-id') 
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]

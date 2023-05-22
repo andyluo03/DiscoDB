@@ -3,7 +3,7 @@ import json
 import bcrypt
 import jwt
 from __main__ import app
-from tools import discord, logger
+from tools import discord, logger, auth
 
 CONFIG = dict(json.load(open("config.json")))
 HEADERS = CONFIG["HEADERS"]
@@ -18,27 +18,23 @@ SECRET_KEY = CONFIG["SECRET_KEY"]
 #     return token["user"] == user_json["user"]
 
 # type param as list of str
-def is_authorized(auth_header) -> bool:
-    try:
-        auth_header_split = auth_header.split(" ")
-        assert(len(auth_header_split) == 2 and auth_header_split[0] == "Bearer") # check if auth header is valid
-        encoded_token = auth_header_split[1]
-        token = jwt.decode(encoded_token, SECRET_KEY, algorithms=["HS256"]) # check if token is valid
-        assert(token["admin"] == True) # check if user is admin in token
-        user_json = discord.query_message(USERS_CHANNEL_ID, token["sub"])
-        assert(user_json["admin"] == True) # check if user is admin in db
-        assert(user_json["name"] == token["name"]) # check if user name in db matches name in token
-        return True
-    except:
-        return False
+# def is_authorized(auth_header) -> bool:
+#     try:
+#         auth_header_split = auth_header.split(" ")
+#         assert(len(auth_header_split) == 2 and auth_header_split[0] == "Bearer") # check if auth header is valid
+#         encoded_token = auth_header_split[1]
+#         token = jwt.decode(encoded_token, SECRET_KEY, algorithms=["HS256"]) # check if token is valid
+#         assert(token["admin"] == True) # check if user is admin in token
+#         user_json = discord.query_message(USERS_CHANNEL_ID, token["sub"])
+#         assert(user_json["admin"] == True) # check if user is admin in db
+#         assert(user_json["name"] == token["name"]) # check if user name in db matches name in token
+#         return True
+#     except:
+#         return False
 
 @app.route("/new-user", methods=["POST"])
-def new_user():
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
-    
+@auth.requires_auth
+def new_user(): 
     # get new user info
     try:
         request_body = json.loads(request.data, strict=False)

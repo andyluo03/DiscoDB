@@ -7,13 +7,9 @@ import jwt
 from __main__ import app
 
 @app.route('/messages/', methods=['POST'])
+@auth.requires_auth
 def upload_data():
     logger.log_request(request)
-
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not auth.is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
@@ -24,13 +20,9 @@ def upload_data():
     return {"status": 200}
 
 @app.route('/messages/', methods=['DELETE'])
+@auth.requires_auth
 def delete_data():
     logger.log_request(request)
-    
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not auth.is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
@@ -41,13 +33,9 @@ def delete_data():
     return {"status": 200}
 
 @app.route('/messages/', methods=['GET'])
+@auth.requires_auth
 def query_data():
     logger.log_request(request)
-    
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not auth.is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
 
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
@@ -56,13 +44,9 @@ def query_data():
     return discord.query_message(target_channel, message_id)
 
 @app.route('/messages/', methods=['PUT'])
+@auth.requires_auth
 def edit_data():
     logger.log_request(request)
-    
-    # authorize user
-    auth_header = request.headers.get('Authorization')
-    if not auth.is_authorized(auth_header):
-        return { "status" : "error", "message": "User is not authorized"}, 403
     
     request_body = json.loads(request.data, strict=False)
     target_channel = request_body["channel_id"]
