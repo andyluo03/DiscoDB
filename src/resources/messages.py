@@ -1,8 +1,6 @@
 from flask import Flask, request
 import json
 from tools import discord, logger, auth
-from base64 import b64decode
-import jwt
 
 from __main__ import app
 

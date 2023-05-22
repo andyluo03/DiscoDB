@@ -3,17 +3,10 @@ import json
 import bcrypt
 import jwt
 import requests
-from base64 import b64decode
 from ratelimit import sleep_and_retry, limits
 
 from __main__ import app
-from tools import discord
-
-CONFIG = dict(json.load(open("config.json")))
-HEADERS = CONFIG["HEADERS"]
-BASE_URL = CONFIG["BASE_URL"]
-USERS_CHANNEL_ID = CONFIG["USERS_CHANNEL_ID"]
-SECRET_KEY = CONFIG["SECRET_KEY"]
+from config import BASE_URL, HEADERS, USERS_CHANNEL_ID, SECRET_KEY
 
 @sleep_and_retry
 @limits(calls=2, period=1)
