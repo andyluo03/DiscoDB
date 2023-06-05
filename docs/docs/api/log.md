@@ -1,6 +1,6 @@
 # Log
 
-## ``get`` /log
+## ``GET`` /log
 
 Headers:
 

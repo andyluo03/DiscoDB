@@ -3,13 +3,8 @@ import json
 import bcrypt
 from __main__ import app
 from tools import discord
-import os
-from base64 import b64encode
 import requests
-
-HEADERS = discord.HEADERS
-BASE_URL = discord.BASE_URL
-USERS_CHANNEL_ID = discord.USERS_CHANNEL_ID
+from config import USERS_CHANNEL_ID, BASE_URL, HEADERS
 
 @app.route("/setup", methods=["POST"])
 def setup():
@@ -45,4 +40,4 @@ def setup():
     #     return { "status": "error", "message": "Failed to send message to users channel" }, 500
     
     # return success
-    return { " status": "success", "message": "User created" }, 200
+    return { "status": "success", "message": "User created" }, 200

@@ -14,13 +14,16 @@ Body:
 
 ```json
 {
-    "user": "<username>",
-    "pwd": "<password>"
+    "name": "<username>",
+    "password": "<password>"
 }
 ```
 
 Response:
 
 ```json
-N/A
+{
+    "message": "User created/<error message>",
+    "status": "success/error"
+}
 ```

@@ -1,0 +1,9 @@
+import json
+
+# load config.json
+CONFIG = dict(json.load(open("config.json")))
+HEADERS = CONFIG["HEADERS"]
+BASE_URL = CONFIG["BASE_URL"]
+USERS_CHANNEL_ID = CONFIG["USERS_CHANNEL_ID"]
+LOG_CHANNEL_ID = CONFIG["LOG_CHANNEL_ID"]
+SECRET_KEY = CONFIG["SECRET_KEY"]

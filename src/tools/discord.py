@@ -1,11 +1,7 @@
 import requests
 import json
 from ratelimit import sleep_and_retry, limits
-
-CONFIG = dict(json.load(open("config.json")))
-HEADERS = CONFIG["HEADERS"]
-BASE_URL = CONFIG["BASE_URL"]
-USERS_CHANNEL_ID = CONFIG["USERS_CHANNEL_ID"]
+from config import HEADERS, BASE_URL
 
 #Block function execution until done
 @sleep_and_retry

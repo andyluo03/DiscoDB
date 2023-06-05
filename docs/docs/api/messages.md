@@ -6,16 +6,15 @@ Posts a new document to a channel
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:
 
 ```json
 {
-    "channel_id": "<channel_id>"
+    "channel_id": "<channel_id>",
     "content" : {
         //DATA
     }
@@ -25,7 +24,10 @@ Body:
 Response:
 
 ```json
-N/A
+{
+    "message": "Data uploaded successfully/<error message>",
+    "status": "success/error"
+}
 ```
 
 ## ``PUT`` /messages
@@ -34,9 +36,8 @@ Edit a message by id in a channel
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:
@@ -54,7 +55,10 @@ Body:
 Response:
 
 ```json
-N/A
+{
+    "message": "Data edited successfully/<error message>",
+    "status": "success/error"
+}
 ```
 
 ## `GET` /messages
@@ -63,9 +67,8 @@ Gets message content by id
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:
@@ -81,7 +84,11 @@ Body:
 
 ```json
 {
-    //JSON
+    "content": {
+        //DATA
+    },
+    "message": "Data retrieved successfully/<error message>",
+    "status": "success/error"
 }
 ```
 
@@ -91,9 +98,8 @@ Delete a message by id in a channel
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:
@@ -108,5 +114,8 @@ Body:
 Response:
 
 ```json
-N/A
+{
+    "message": "Data deleted successfully/<error message>",
+    "status": "success/error"
+}
 ```

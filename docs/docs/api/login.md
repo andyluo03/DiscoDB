@@ -12,8 +12,8 @@ Body:
 
 ```json
 {
-    "user": "<username>",
-    "pwd": "<password>"
+    "name": "<username>",
+    "password": "<password>"
 }
 ```
 
@@ -21,7 +21,8 @@ Response:
 
 ```json
 {
-    "token" : "<jwt_token>",
-    "user_id" : "<user_id>"
+    "Authorization": "Bearer <token>",
+    "message": "User logged in/<error message>",
+    "status": "success/error"
 }
 ```

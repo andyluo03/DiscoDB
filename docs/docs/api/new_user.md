@@ -4,22 +4,24 @@
 
 Headers:
 
-```json
-token: <jwt-token> 
-user-id: <user-id>
+```
+Authorization: Bearer <token>
 ```
 
 Body:
 
 ```json
 {
-    "new_user" = "<new_username>",
-    "new_pwd" = "<new_password>"
+    "name": "<username>",
+    "password": "<password>"
 }
 ```
 
 Response:
 
 ```json
-N/A
+{
+    "message": "User created/<error message>",
+    "status": "success/error"
+}
 ```
